@@ -1,19 +1,15 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { ConsolePanel } from '../components/ConsolePanel.jsx'
 
 const NAV = [
-  { to: '/', label: 'Home' },
-  { to: '/js-core', label: 'JS Core' },
-  { to: '/async', label: 'Async & Event Loop' },
-  { to: '/hooks', label: 'React Hooks' },
-  { to: '/state', label: 'State (Context/Redux)' },
-  { to: '/performance', label: 'Performance' },
+  { to: '/', label: 'Dashboard' },
+  { to: '/transactions', label: 'Transactions' },
+  { to: '/budgets', label: 'Budgets' },
+  { to: '/reports', label: 'Reports' },
+  { to: '/settings', label: 'Settings' },
 ]
 
 export function RootLayout() {
-  const [isConsoleOpen, setIsConsoleOpen] = useState(true)
-
   const navItems = useMemo(
     () =>
       NAV.map((item) => (
@@ -33,24 +29,28 @@ export function RootLayout() {
     <div className="appShell">
       <aside className="sidebar">
         <div className="sidebar__brand">
-          <div className="sidebar__title">Interview Prep Lab</div>
-          <div className="sidebar__subtitle">JS + React concepts, made visual</div>
+          <div className="sidebar__title">PocketLedger</div>
+          <div className="sidebar__subtitle">Personal finance tracker</div>
         </div>
         <nav className="nav" aria-label="Primary navigation">
           {navItems}
         </nav>
         <div className="sidebar__footer">
-          <button type="button" className="btn btn--ghost" onClick={() => setIsConsoleOpen((v) => !v)}>
-            {isConsoleOpen ? 'Hide' : 'Show'} console
-          </button>
+          <div className="sidebar__hint">Tip: use Reports to explain memoization + code splitting.</div>
         </div>
       </aside>
 
       <main className="main">
-        <Outlet />
+        <div className="topbar">
+          <div className="topbar__left">
+            <div className="topbar__title">PocketLedger</div>
+            <div className="topbar__meta">Demo app (offline)</div>
+          </div>
+        </div>
+        <div className="content">
+          <Outlet />
+        </div>
       </main>
-
-      {isConsoleOpen ? <ConsolePanel className="appShell__console" /> : null}
     </div>
   )
 }
