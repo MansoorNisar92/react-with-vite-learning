@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { FixedSizeList as List } from 'react-window'
+import { List } from 'react-window'
 import { useDispatch, useSelector } from 'react-redux'
 import { addTransaction, deleteTransaction, updateTransaction } from '../store/transactionsSlice.js'
 import { selectFilteredTransactions, selectTransactionsByIdMap } from '../store/selectors.js'
@@ -170,10 +170,11 @@ export default function Transactions() {
   }, [category, query, transactions])
 
   const Row = useCallback(
-    ({ index, style }) => {
+    ({ index, style, ariaAttributes }) => {
       const t = filtered[index]
+      if (!t) return null
       return (
-        <div className="vRow" style={style}>
+        <div className="vRow" style={style} {...ariaAttributes}>
           <div className="mono">{t.date}</div>
           <div className="vRow__payee">{t.payee}</div>
           <div className="tag">{t.category}</div>
@@ -244,9 +245,13 @@ export default function Transactions() {
           </div>
 
           <div className="vBody">
-            <List height={520} width="100%" itemCount={filtered.length} itemSize={52}>
-              {Row}
-            </List>
+            <List
+              rowCount={filtered.length}
+              rowHeight={52}
+              rowComponent={Row}
+              overscanCount={6}
+              style={{ height: 520 }}
+            />
           </div>
 
           <div className="vFooter">
